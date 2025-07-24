@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>✨ Cápsula del Tiempo</title>
+  <style>
+    body {
+      font-family: "Times New Roman", serif;
+      background-color: #000;
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1, h2, h3 {
+      color: gold;
+    }
+
+    input, textarea, button, select {
+      margin: 10px;
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
+      font-family: "Times New Roman", serif;
+      border-radius: 8px;
+      border: none;
+    }
+
+    input[type="file"] {
+      background-color: #222;
+      color: white;
+      border: 1px solid gold;
+    }
+
+    .capsula {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .boton-3d {
+      background: linear-gradient(to bottom, #ffd700, #b8860b);
+      color: black;
+      font-weight: bold;
+      box-shadow: 0 5px #999;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .boton-3d:hover {
+      transform: scale(1.05);
+    }
+
+    .boton-3d:active {
+      box-shadow: 0 2px #666;
+      transform: translateY(4px);
+    }
+
+  
+
+    .archivo-item img {
+      max-width: 200px;
+      height: auto;
+      border-radius: 5px;
+      margin-top: 5px;
+    }
+
+    embed, video, iframe {
+      width: 90%;
+      max-width: 300px;
+      margin-top: 10px;
+      border: none;
+    }
+
+    #fotoPerfil {
+      max-width: 150px;
+      border-radius: 50%;
+      border: 2px solid gold;
+      margin-top: 10px;
+    }
+
+   .btn-eliminar {
+  background-color: crimson;
+  color: white;
+  margin-top: 10px;
+  padding: 5px; /* mismo padding para arriba, abajo y lados */
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  width: fit-content; /* se ajusta al ancho del contenido */
+  font-size: 14px;
+  display: inline-block;
+}
+
+.btn-eliminar:hover {
+  background-color: darkred;
+}
+
+
+    .descripcion {
+      max-width: 800px;
+      margin: auto;
+      text-align: justify;
+    }
+
+    .idiomas {
+      margin: 20px auto;
+      text-align: left;
+      max-width: 800px;
+    }
+
+    .idiomas button {
+      margin-right: 10px;
+      padding: 8px 16px;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <h1>Cápsula del Tiempo</h1>
+  
+   <div style="text-align: center; margin-top: -10px; margin-bottom: 30px;">
+      <img src="https://i.postimg.cc/qBNw65Sn/d7120c50-7275-4d4a-8738-492419f6f3e6.jpg"
+           alt="Imagen decorativa"
+           style="max-width: 150px; border: 3px solid gold; border-radius: 10px; box-shadow: 0 0 15px gold;">
+    </div>
+
+  <div class="descripcion" id="descripcion">
+    <p>
+      Una cápsula del tiempo es un espacio personal y privado donde puedes guardar recuerdos importantes como fotos, videos, cartas o documentos, para volver a verlos en el futuro.
+    </p>
+    <p>
+      Esta aplicación permite a cada usuario crear su propia cápsula protegida con contraseña. Podrás subir hasta 10 fotos, un video y un documento PDF, todo en un entorno seguro y personalizado.
+    </p>
+    <h2>¿Para qué sirve?🤔</h2>
+    <p>
+      • Para guardar momentos únicos.<br>
+      • Para reflexionar sobre quién eres hoy y quién serás mañana.<br>
+      • Para crear un testimonio personal de tu historia.
+    </p>
+    <p>
+      También puedes incluir una foto tuya en el momento de creación. Al regresar y abrir tu cápsula, podrás ver cómo pensabas, sentías y vivías en ese momento.
+    </p>
+    <p><strong>¡Es como un mensaje al futuro enviado por tu yo del presente!</strong></p>
+  </div>
+  
+   <h2>⏳ Crear tu Capsula del Tiempo</h2>
+
+  <div id="registro">
+    <input type="text" id="nombre" placeholder="Tu nombre completo" />
+    <input type="password" id="clave" placeholder="Crea una contraseña" />
+    <h4>Sube tu foto de perfil</h4>
+    <input type="file" id="fotoPerfilInput" accept="image/*" />
+    <br>
+    <button class="boton-3d" onclick="crearCapsula()">Crear Cápsula</button>
+  </div>
+
+  <div id="acceso">
+    <h3>¿Ya tienes una cápsula?</h3>
+    <input type="password" id="claveAcceso" placeholder="Ingresa tu contraseña" />
+    <button class="boton-3d" onclick="abrirCapsula()">Abrir Cápsula</button>
+  </div>
+
+  <div class="capsula" id="capsula">
+    <h2>Bienvenido/a <span id="nombreUsuario"></span></h2>
+    <img id="fotoPerfil" src="" alt="Foto de perfil" />
+    <p>📅 Fecha de creación: <span id="fechaCreacion"></span></p>
+
+    <h3>📤 Subir archivo</h3>
+    <input type="file" id="archivo" />
+    <button class="boton-3d" onclick="guardarArchivo()">Guardar archivo</button>
+
+    <h3>📚 Archivos guardados:</h3>
+    <div id="archivosGuardados"></div>
+
+    <br>
+    <button class="boton-3d" onclick="cerrarSesion()">🔒 Cerrar sesión</button>
+    <button class="boton-3d" style="background: red; color: white;" onclick="eliminarCapsula()">🗑️ Borrar Cápsula</button>
+  </div>
+
+  <script>
+    function crearCapsula() {
+      const nombre = document.getElementById('nombre').value;
+      const clave = document.getElementById('clave').value;
+      const foto = document.getElementById('fotoPerfilInput').files[0];
+      const fecha = new Date().toLocaleString();
+
+      if (!nombre || !clave || !foto) {
+        alert("Completa todos los campos y sube una foto.");
+        return;
+      }
+
+      const lector = new FileReader();
+      lector.onload = function (e) {
+        const fotoData = e.target.result;
+        const usuario = {
+          nombre,
+          clave,
+          fecha,
+          fotoPerfil: fotoData,
+          archivos: []
+        };
+        localStorage.setItem('capsula_' + clave, JSON.stringify(usuario));
+        alert('¡Cápsula creada con éxito!');
+        document.getElementById('registro').style.display = 'none';
+        document.getElementById('acceso').style.display = 'block';
+      };
+      lector.readAsDataURL(foto);
+    }
+
+    function abrirCapsula() {
+      const clave = document.getElementById('claveAcceso').value;
+      const data = localStorage.getItem('capsula_' + clave);
+      if (data) {
+        const usuario = JSON.parse(data);
+        document.getElementById('descripcion').style.display = 'none';
+        mostrarCapsula(usuario, clave);
+      } else {
+        alert('Contraseña incorrecta o cápsula no encontrada.');
+      }
+    }
+
+    function mostrarCapsula(usuario, clave) {
+      document.getElementById('registro').style.display = 'none';
+      document.getElementById('acceso').style.display = 'none';
+      document.getElementById('capsula').style.display = 'block';
+      document.getElementById('nombreUsuario').innerText = usuario.nombre;
+      document.getElementById('fechaCreacion').innerText = usuario.fecha;
+      document.getElementById('fotoPerfil').src = usuario.fotoPerfil;
+
+      const contenedor = document.getElementById('archivosGuardados');
+      contenedor.innerHTML = '';
+      usuario.archivos.forEach((a, i) => {
+        let vista = `<strong>${a.nombre}</strong><br>`;
+        if (a.tipo.startsWith("image/")) {
+          vista += `<img src="${a.data}" alt="Imagen" />`;
+        } else if (a.tipo === "application/pdf") {
+          vista += `<iframe src="${a.data}" type="application/pdf" height="200px"></iframe>`;
+        } else if (a.tipo.startsWith("video/")) {
+          vista += `<video controls src="${a.data}" height="200px"></video>`;
+        }
+        vista += `<br><button class="btn-eliminar" onclick="eliminarArchivo(${i})">Eliminar</button>`;
+        contenedor.innerHTML += `<div class="archivo-item">📁 ${vista}</div>`;
+      });
+
+      window.usuarioActual = usuario;
+      window.claveActual = clave;
+    }
+
+    function contarArchivosPorTipo(lista, tipo) {
+      return lista.filter(f => f.tipo.startsWith(tipo)).length;
+    }
+
+    function guardarArchivo() {
+      const archivo = document.getElementById('archivo').files[0];
+      if (!archivo) return alert("Selecciona un archivo.");
+
+      const tipo = archivo.type;
+      const imagenes = contarArchivosPorTipo(window.usuarioActual.archivos, "image/");
+      const pdfs = contarArchivosPorTipo(window.usuarioActual.archivos, "application/pdf");
+      const videos = contarArchivosPorTipo(window.usuarioActual.archivos, "video/");
+
+      if (tipo.startsWith("image/") && imagenes >= 10) return alert("Máximo 10 imágenes.");
+      if (tipo === "application/pdf" && pdfs >= 1) return alert("Solo 1 PDF permitido.");
+      if (tipo.startsWith("video/") && videos >= 1) return alert("Solo 1 video permitido.");
+
+      const lector = new FileReader();
+      lector.onload = function (e) {
+        const nuevoArchivo = {
+          nombre: archivo.name,
+          tipo: archivo.type,
+          data: e.target.result
+        };
+        window.usuarioActual.archivos.push(nuevoArchivo);
+        localStorage.setItem('capsula_' + window.claveActual, JSON.stringify(window.usuarioActual));
+        mostrarCapsula(window.usuarioActual, window.claveActual);
+      };
+      lector.readAsDataURL(archivo);
+    }
+
+    function eliminarArchivo(indice) {
+      if (confirm("¿Eliminar este archivo?")) {
+        window.usuarioActual.archivos.splice(indice, 1);
+        localStorage.setItem('capsula_' + window.claveActual, JSON.stringify(window.usuarioActual));
+        mostrarCapsula(window.usuarioActual, window.claveActual);
+      }
+    }
+
+    function cerrarSesion() {
+      document.getElementById('capsula').style.display = 'none';
+      document.getElementById('descripcion').style.display = 'block';
+      document.getElementById('registro').style.display = 'block';
+      document.getElementById('acceso').style.display = 'block';
+      document.getElementById('nombre').value = '';
+      document.getElementById('clave').value = '';
+      document.getElementById('fotoPerfilInput').value = '';
+      document.getElementById('claveAcceso').value = '';
+    }
+
+    function eliminarCapsula() {
+      if (confirm("¿Borrar tu cápsula completamente?")) {
+        localStorage.removeItem('capsula_' + window.claveActual);
+        alert("Cápsula eliminada.");
+        cerrarSesion();
+      }
+    }
+  </script>
+<!-- Asegúrate de incluir esta línea en tu <head> -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  footer {
+    background-color: #000;
+    color: #ccc;
+    padding: 30px 20px;
+    font-size: 0.8rem;
+    text-align: center;
+    line-height: 1.5;
+    border-top: 2px solid #ff6f00;
+    margin-top: 40px;
+    font-family: 'Playfair Display', serif;
+  }
+
+  footer strong {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  footer em {
+    color: #ffa726;
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  footer a {
+    color: #F6BE00;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+  .enlaces-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  .enlaces-footer a {
+    white-space: nowrap;
+  }
+
+  .contador-visitas {
+    margin-top: 25px;
+  }
+
+  .contador-visitas img {
+    max-width: 100px;
+    opacity: 0.9;
+  }
+
+  .doi-badge img,
+  .cc-logo img {
+    vertical-align: middle;
+    height: 20px;
+    margin: 0 5px;
+  }
+</style>
+
+<footer>
+  © 2024 — Herramientas del Proyecto de Investigación: <strong>*Emociones en el Aula*</strong><br>
+  Propuesta educativa y cultural creada por <strong>Yobana Orozco Benavides</strong>, Escritora | Docente | Gestora de proyectos artísticos y pedagógicos<br><br>
+  
+  Licencia: 
+  <em>Creative Commons Atribución-NoComercial 4.0 Internacional (CC BY-NC 4.0)</em>
+  <span class="cc-logo">
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">
+      <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC Logo">
+    </a>
+  </span>
+  <br>
+  Uso libre con fines educativos — <strong>prohibido uso comercial</strong><br><br>
+
+  Más información de la autora: 
+  <a href="https://yobanaorozcoartista.bio.link/" target="_blank" rel="noopener">yobanaorozcoartista.bio.link</a>
+
+  <div class="enlaces-footer">
+    <a href="https://orcid.org/0009-0002-9253-6429" target="_blank">ORCID</a>
+    <a href="https://www.webofscience.com/wos/?mode=Nextgen&path=%2Fwos%2Fauthor%2Frecord%2FLLM-9647-2024&IsProductCode=Yes&Init=Yes&DestApp=UA&Func=Frame&action=transfer&SrcApp=CR&SID=USW2EC0AFFb0eJYIUmqxKCgZWIVbn" target="_blank">Web of Science</a>
+    <a href="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fwww.ncbi.nlm.nih.gov%2Fmyncbi%2F" target="_blank">NCBI</a>
+    <a href="https://es.slideshare.net/YOBANAOROZCO" target="_blank">SlideShare</a>
+    <a href="https://hq.ssrn.com/login/authentication.cfm?rectype=edit&perinf=y&partid=7786766" target="_blank">SSRN</a>
+    <a href="https://www.researchgate.net/" target="_blank">ResearchGate</a>
+    <a href="https://siise.bibliotecanacional.gov.co/siise/Login?ReturnUrl=%2fsiise%2fSeleccionAdquisiciones%2fSolicitudISSN%2fIndex" target="_blank">SIISE</a>
+    <a href="https://scientificrc.org/index.php/src/login?source=%2Findex.php%2Fsrc%2Fsubmission%2Fwizard" target="_blank">Scientific RC</a>
+    <a href="https://www.openaire.eu/annual-reports" target="_blank">OpenAIRE</a>
+    <a href="https://zenodo.org/" target="_blank">Zenodo</a>
+    <a href="https://sso.anii.org.uy/oxauth/login.htm" target="_blank">ANII</a>
+    <a href="https://rizoma.conahcyt.mx/acerca-de-mi/mi-perfil" target="_blank">Rizoma CONAHCYT</a>
+    <a href="https://papersubmission.scirp.org/paper/showAddPaper" target="_blank">SCIRP Submission</a>
+    <a href="https://utolima.academia.edu/YOBANAOROZCOBENAVIDES" target="_blank">Academia.edu</a>
+    <a href="https://www.studocu.com/co/user/yobana-orozco-benavides/15382735?origin=user-menu" target="_blank">Studocu</a>
+    <a href="https://www.calameo.com/accounts/7997056" target="_blank">Calameo</a>
+    <a href="https://www.amazon.com.mx/stores/YOBANA-OROZCO-BENAVIDES/author/B0CZG5RS1T?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true" target="_blank">Amazon</a>
+  </div>
+ 
+  </div>
+</footer>
+
+</body>
+</html>
+
