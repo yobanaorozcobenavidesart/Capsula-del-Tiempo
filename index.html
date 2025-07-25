@@ -2,18 +2,25 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>✨ Cápsula del Tiempo</title>
   <style>
     body {
       font-family: "Times New Roman", serif;
       background-color: #000;
       color: white;
-      padding: 40px;
+      padding: 20px;
       text-align: center;
+      transition: all 0.3s;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     h1, h2, h3 {
       color: gold;
+      margin: 15px 0;
     }
 
     input, textarea, button, select {
@@ -24,12 +31,15 @@
       font-family: "Times New Roman", serif;
       border-radius: 8px;
       border: none;
+      box-sizing: border-box;
     }
 
     input[type="file"] {
       background-color: #222;
       color: white;
       border: 1px solid gold;
+      width: 80%;
+      max-width: 400px;
     }
 
     .capsula {
@@ -44,10 +54,15 @@
       box-shadow: 0 5px #999;
       transition: all 0.2s;
       cursor: pointer;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      margin: 10px 5px;
     }
 
     .boton-3d:hover {
       transform: scale(1.05);
+      box-shadow: 0 7px #666;
     }
 
     .boton-3d:active {
@@ -55,7 +70,14 @@
       transform: translateY(4px);
     }
 
-  
+    .archivo-item {
+      margin: 15px 0;
+      padding: 15px;
+      background-color: #111;
+      border-radius: 10px;
+      max-width: 90%;
+      display: inline-block;
+    }
 
     .archivo-item img {
       max-width: 200px;
@@ -69,6 +91,7 @@
       max-width: 300px;
       margin-top: 10px;
       border: none;
+      border-radius: 5px;
     }
 
     #fotoPerfil {
@@ -76,117 +99,487 @@
       border-radius: 50%;
       border: 2px solid gold;
       margin-top: 10px;
+      box-shadow: 0 0 10px gold;
     }
 
-   .btn-eliminar {
-  background-color: crimson;
-  color: white;
-  margin-top: 10px;
-  padding: 5px; /* mismo padding para arriba, abajo y lados */
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  width: fit-content; /* se ajusta al ancho del contenido */
-  font-size: 14px;
-  display: inline-block;
-}
+    .btn-eliminar {
+      background-color: crimson;
+      color: white;
+      margin-top: 10px;
+      padding: 8px 15px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-block;
+      transition: background-color 0.3s;
+    }
 
-.btn-eliminar:hover {
-  background-color: darkred;
-}
-
+    .btn-eliminar:hover {
+      background-color: darkred;
+    }
 
     .descripcion {
       max-width: 800px;
-      margin: auto;
-      text-align: justify;
-    }
-
-    .idiomas {
       margin: 20px auto;
-      text-align: left;
-      max-width: 800px;
+      text-align: justify;
+      line-height: 1.6;
+      padding: 0 15px;
     }
 
-    .idiomas button {
-      margin-right: 10px;
-      padding: 8px 16px;
+  /* Botones de idioma mejorados */
+.contenedor-idiomas {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  flex-wrap: nowrap;       /* Botones en línea horizontal */
+  gap: 8px;
+  max-width: 500px;
+  overflow-x: auto;        /* Scroll horizontal si hay muchos botones */
+}
+
+.boton-idioma {
+  padding: 6px 12px;        /* Ajustado al texto */
+  border-radius: 20px;
+  background: #333;
+  color: white;
+  border: 1px solid gold;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: fit-content;
+}
+
+.boton-idioma:hover {
+  background: gold;
+  color: black;
+}
+
+.boton-idioma.active {
+  background: gold;
+  color: black;
+  font-weight: bold;
+  box-shadow: 0 0 10px gold;
+}
+
+.bandera {
+  margin-right: 5px;
+  font-size: 16px;
+}
+
+
+    .logo-capsula {
+      max-width: 150px;
+      border: 3px solid gold;
+      border-radius: 10px;
+      box-shadow: 0 0 15px gold;
+      margin: 20px auto;
     }
-    
+
+    .limite-archivos {
+      color: #ff9999;
+      font-size: 0.9em;
+      margin-top: -5px;
+      margin-bottom: 10px;
+    }
+
+    /* Pie de página mejorado */
+    footer {
+      background-color: #111;
+      color: #ccc;
+      padding: 30px 20px;
+      font-size: 0.9rem;
+      text-align: center;
+      line-height: 1.6;
+      border-top: 2px solid gold;
+      margin-top: 40px;
+      font-family: 'Georgia', serif;
+      width: 100%;
+    }
+
+    footer strong {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    footer em {
+      color: #ffa726;
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    footer a {
+      color: #F6BE00;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: gold;
+      text-decoration: underline;
+    }
+
+    .enlaces-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .enlaces-footer a {
+      white-space: nowrap;
+      padding: 5px 10px;
+      background: rgba(255, 215, 0, 0.1);
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    .enlaces-footer a:hover {
+      background: rgba(255, 215, 0, 0.2);
+    }
+
+    .cc-licencia {
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .cc-logo img {
+      height: 20px;
+      margin: 0 3px;
+      vertical-align: middle;
+    }
+
+    .autor-info {
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      
+      input, textarea, button, select {
+        width: 95%;
+      }
+      
+      .descripcion {
+        padding: 0 10px;
+      }
+      
+      .boton-idioma {
+        padding: 6px 12px;
+        font-size: 13px;
+      }
+      
+      .enlaces-footer {
+        gap: 8px;
+      }
+      
+      .enlaces-footer a {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <h1>Cápsula del Tiempo</h1>
+  <div class="contenedor-idiomas">
+    <button id="btn-es" class="boton-idioma active" onclick="cambiarIdioma('es')">
+      <span class="bandera">🇪🇸</span> Es
+    </button>
+    <button id="btn-en" class="boton-idioma" onclick="cambiarIdioma('en')">
+      <span class="bandera">🇬🇧</span> En
+    </button>
+    <button id="btn-fr" class="boton-idioma" onclick="cambiarIdioma('fr')">
+      <span class="bandera">🇫🇷</span> Fr
+    </button>
+  </div>
+
+  <h1 id="titulo-principal">Cápsula del Tiempo</h1>
   
-   <div style="text-align: center; margin-top: -10px; margin-bottom: 30px;">
-      <img src="https://i.postimg.cc/qBNw65Sn/d7120c50-7275-4d4a-8738-492419f6f3e6.jpg"
-           alt="Imagen decorativa"
-           style="max-width: 150px; border: 3px solid gold; border-radius: 10px; box-shadow: 0 0 15px gold;">
-    </div>
+  <div style="text-align: center;">
+    <img src="https://i.postimg.cc/qBNw65Sn/d7120c50-7275-4d4a-8738-492419f6f3e6.jpg"
+         alt="Imagen decorativa" class="logo-capsula">
+  </div>
 
   <div class="descripcion" id="descripcion">
-    <p>
+    <p id="descripcion-1">
       Una cápsula del tiempo es un espacio personal y privado donde puedes guardar recuerdos importantes como fotos, videos, cartas o documentos, para volver a verlos en el futuro.
     </p>
-    <p>
+    <p id="descripcion-2">
       Esta aplicación permite a cada usuario crear su propia cápsula protegida con contraseña. Podrás subir hasta 10 fotos, un video y un documento PDF, todo en un entorno seguro y personalizado.
     </p>
-    <h2>¿Para qué sirve?🤔</h2>
-    <p>
+    <h2 id="para-que-sirve">¿Para qué sirve?🤔</h2>
+    <p id="descripcion-3">
       • Para guardar momentos únicos.<br>
       • Para reflexionar sobre quién eres hoy y quién serás mañana.<br>
       • Para crear un testimonio personal de tu historia.
     </p>
-    <p>
+    <p id="descripcion-4">
       También puedes incluir una foto tuya en el momento de creación. Al regresar y abrir tu cápsula, podrás ver cómo pensabas, sentías y vivías en ese momento.
     </p>
-    <p><strong>¡Es como un mensaje al futuro enviado por tu yo del presente!</strong></p>
+    <p id="descripcion-5"><strong>¡Es como un mensaje al futuro enviado por tu yo del presente!</strong></p>
   </div>
   
-   <h2>⏳ Crear tu Capsula del Tiempo</h2>
+  <h2 id="titulo-crear">⏳ Crear tu Cápsula del Tiempo</h2>
 
   <div id="registro">
     <input type="text" id="nombre" placeholder="Tu nombre completo" />
     <input type="password" id="clave" placeholder="Crea una contraseña" />
-    <h4>Sube tu foto de perfil</h4>
+    <h4 id="subtitulo-foto">Sube tu foto de perfil</h4>
     <input type="file" id="fotoPerfilInput" accept="image/*" />
     <br>
-    <button class="boton-3d" onclick="crearCapsula()">Crear Cápsula</button>
+    <button class="boton-3d" onclick="crearCapsula()" id="btn-crear">Crear Cápsula</button>
   </div>
 
   <div id="acceso">
-    <h3>¿Ya tienes una cápsula?</h3>
+    <h3 id="titulo-acceso">¿Ya tienes una cápsula?</h3>
     <input type="password" id="claveAcceso" placeholder="Ingresa tu contraseña" />
-    <button class="boton-3d" onclick="abrirCapsula()">Abrir Cápsula</button>
+    <button class="boton-3d" onclick="abrirCapsula()" id="btn-abrir">Abrir Cápsula</button>
   </div>
 
   <div class="capsula" id="capsula">
-    <h2>Bienvenido/a <span id="nombreUsuario"></span></h2>
+    <h2 id="bienvenido">Bienvenido/a <span id="nombreUsuario"></span></h2>
     <img id="fotoPerfil" src="" alt="Foto de perfil" />
-    <p>📅 Fecha de creación: <span id="fechaCreacion"></span></p>
+    <p id="fecha-creacion">📅 Fecha de creación: <span id="fechaCreacion"></span></p>
 
-    <h3>📤 Subir archivo</h3>
+    <h3 id="subir-archivo">📤 Subir archivo</h3>
     <input type="file" id="archivo" />
-    <button class="boton-3d" onclick="guardarArchivo()">Guardar archivo</button>
+    <p class="limite-archivos" id="limite-archivos">(Máximo 10 fotos, 1 video y 1 PDF)</p>
+    <button class="boton-3d" onclick="guardarArchivo()" id="btn-guardar">Guardar archivo</button>
 
-    <h3>📚 Archivos guardados:</h3>
+    <h3 id="archivos-guardados-titulo">📚 Archivos guardados:</h3>
     <div id="archivosGuardados"></div>
 
     <br>
-    <button class="boton-3d" onclick="cerrarSesion()">🔒 Cerrar sesión</button>
-    <button class="boton-3d" style="background: red; color: white;" onclick="eliminarCapsula()">🗑️ Borrar Cápsula</button>
+    <button class="boton-3d" onclick="cerrarSesion()" id="btn-cerrar">🔒 Cerrar sesión</button>
+    <button class="boton-3d" style="background: red; color: white;" onclick="eliminarCapsula()" id="btn-eliminar">🗑️ Borrar Cápsula</button>
   </div>
 
+  <footer>
+    <div class="autor-info">
+      © 2024-2025 — Herramientas del Proyecto de Investigación: <strong>*Emociones en el Aula*</strong><br>
+      Propuesta educativa y cultural creada por <strong>Yobana Orozco Benavides</strong>, Escritora | Docente | Gestora de proyectos artísticos y pedagógicos
+    </div>
+    
+    <div class="cc-licencia">
+      Licencia: 
+      <em>Creative Commons Atribución-NoComercial 4.0 Internacional (CC BY-NC 4.0)</em>
+      <span class="cc-logo">
+        <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">
+          <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC Logo">
+          <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY Logo">
+          <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC Logo">
+        </a>
+      </span>
+    </div>
+    
+    <div>
+      Uso libre con fines educativos — <strong>prohibido uso comercial</strong><br><br>
+      Más información de la autora: 
+      <a href="https://yobanaorozcoartista.bio.link/" target="_blank" rel="noopener">yobanaorozcoartista.bio.link</a>
+    </div>
+
+    <div class="enlaces-footer">
+      <a href="https://orcid.org/0009-0002-9253-6429" target="_blank">ORCID</a>
+      <a href="https://www.webofscience.com/wos/?mode=Nextgen&path=%2Fwos%2Fauthor%2Frecord%2FLLM-9647-2024&IsProductCode=Yes&Init=Yes&DestApp=UA&Func=Frame&action=transfer&SrcApp=CR&SID=USW2EC0AFFb0eJYIUmqxKCgZWIVbn" target="_blank">Web of Science</a>
+      <a href="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fwww.ncbi.nlm.nih.gov%2Fmyncbi%2F" target="_blank">NCBI</a>
+      <a href="https://es.slideshare.net/YOBANAOROZCO" target="_blank">SlideShare</a>
+      <a href="https://hq.ssrn.com/login/authentication.cfm?rectype=edit&perinf=y&partid=7786766" target="_blank">SSRN</a>
+      <a href="https://www.researchgate.net/" target="_blank">ResearchGate</a>
+      <a href="https://siise.bibliotecanacional.gov.co/siise/Login?ReturnUrl=%2fsiise%2fSeleccionAdquisiciones%2fSolicitudISSN%2fIndex" target="_blank">SIISE</a>
+      <a href="https://scientificrc.org/index.php/src/login?source=%2Findex.php%2Fsrc%2Fsubmission%2Fwizard" target="_blank">Scientific RC</a>
+      <a href="https://www.openaire.eu/annual-reports" target="_blank">OpenAIRE</a>
+      <a href="https://zenodo.org/" target="_blank">Zenodo</a>
+      <a href="https://sso.anii.org.uy/oxauth/login.htm" target="_blank">ANII</a>
+      <a href="https://rizoma.conahcyt.mx/acerca-de-mi/mi-perfil" target="_blank">Rizoma CONAHCYT</a>
+      <a href="https://papersubmission.scirp.org/paper/showAddPaper" target="_blank">SCIRP Submission</a>
+      <a href="https://utolima.academia.edu/YOBANAOROZCOBENAVIDES" target="_blank">Academia.edu</a>
+      <a href="https://www.studocu.com/co/user/yobana-orozco-benavides/15382735?origin=user-menu" target="_blank">Studocu</a>
+      <a href="https://www.calameo.com/accounts/7997056" target="_blank">Calameo</a>
+      <a href="https://www.amazon.com.mx/stores/YOBANA-OROZCO-BENAVIDES/author/B0CZG5RS1T?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true" target="_blank">Amazon</a>
+    </div>
+  </footer>
+
   <script>
+    // Traducciones
+    const traducciones = {
+      es: {
+        titulo: "Cápsula del Tiempo",
+        descripcion1: "Una cápsula del tiempo es un espacio personal y privado donde puedes guardar recuerdos importantes como fotos, videos, cartas o documentos, para volver a verlos en el futuro.",
+        descripcion2: "Esta aplicación permite a cada usuario crear su propia cápsula protegida con contraseña. Podrás subir hasta 10 fotos, un video y un documento PDF, todo en un entorno seguro y personalizado.",
+        paraQueSirve: "¿Para qué sirve?🤔",
+        descripcion3: "• Para guardar momentos únicos.<br>• Para reflexionar sobre quién eres hoy y quién serás mañana.<br>• Para crear un testimonio personal de tu historia.",
+        descripcion4: "También puedes incluir una foto tuya en el momento de creación. Al regresar y abrir tu cápsula, podrás ver cómo pensabas, sentías y vivías en ese momento.",
+        descripcion5: "¡Es como un mensaje al futuro enviado por tu yo del presente!",
+        crearTitulo: "⏳ Crear tu Cápsula del Tiempo",
+        nombrePlaceholder: "Tu nombre completo",
+        clavePlaceholder: "Crea una contraseña",
+        fotoSubtitulo: "Sube tu foto de perfil",
+        btnCrear: "Crear Cápsula",
+        accesoTitle: "¿Ya tienes una cápsula?",
+        accesoPlaceholder: "Ingresa tu contraseña",
+        btnAbrir: "Abrir Cápsula",
+        bienvenido: "Bienvenido/a",
+        fechaCreacion: "📅 Fecha de creación:",
+        subirArchivo: "📤 Subir archivo",
+        limiteArchivos: "(Máximo 10 fotos, 1 video y 1 PDF)",
+        btnGuardar: "Guardar archivo",
+        archivosTitulo: "📚 Archivos guardados:",
+        btnCerrar: "🔒 Cerrar sesión",
+        btnEliminar: "🗑️ Borrar Cápsula",
+        alertaCampos: "Completa todos los campos y sube una foto.",
+        alertaCreada: "¡Cápsula creada con éxito!",
+        alertaNoEncontrada: "Contraseña incorrecta o cápsula no encontrada.",
+        alertaSeleccionaArchivo: "Selecciona un archivo.",
+        alertaMaxFotos: "Máximo 10 imágenes.",
+        alertaMaxPDF: "Solo 1 PDF permitido.",
+        alertaMaxVideo: "Solo 1 video permitido.",
+        confirmarEliminarArchivo: "¿Eliminar este archivo?",
+        confirmarEliminarCapsula: "¿Borrar tu cápsula completamente?",
+        alertaCapsulaEliminada: "Cápsula eliminada."
+      },
+      en: {
+        titulo: "Time Capsule",
+        descripcion1: "A time capsule is a personal and private space where you can store important memories like photos, videos, letters or documents to revisit in the future.",
+        descripcion2: "This application allows each user to create their own password-protected capsule. You can upload up to 10 photos, one video and one PDF document, all in a secure and personalized environment.",
+        paraQueSirve: "What is it for?🤔",
+        descripcion3: "• To preserve unique moments.<br>• To reflect on who you are today and who you will be tomorrow.<br>• To create a personal testimony of your history.",
+        descripcion4: "You can also include a photo of yourself at the time of creation. When you return and open your capsule, you'll see how you thought, felt and lived at that moment.",
+        descripcion5: "It's like a message to the future sent by your present self!",
+        crearTitulo: "⏳ Create your Time Capsule",
+        nombrePlaceholder: "Your full name",
+        clavePlaceholder: "Create a password",
+        fotoSubtitulo: "Upload your profile photo",
+        btnCrear: "Create Capsule",
+        accesoTitle: "Already have a capsule?",
+        accesoPlaceholder: "Enter your password",
+        btnAbrir: "Open Capsule",
+        bienvenido: "Welcome",
+        fechaCreacion: "📅 Creation date:",
+        subirArchivo: "📤 Upload file",
+        limiteArchivos: "(Maximum 10 photos, 1 video and 1 PDF)",
+        btnGuardar: "Save file",
+        archivosTitulo: "📚 Saved files:",
+        btnCerrar: "🔒 Logout",
+        btnEliminar: "🗑️ Delete Capsule",
+        alertaCampos: "Complete all fields and upload a photo.",
+        alertaCreada: "Capsule created successfully!",
+        alertaNoEncontrada: "Incorrect password or capsule not found.",
+        alertaSeleccionaArchivo: "Select a file.",
+        alertaMaxFotos: "Maximum 10 images.",
+        alertaMaxPDF: "Only 1 PDF allowed.",
+        alertaMaxVideo: "Only 1 video allowed.",
+        confirmarEliminarArchivo: "Delete this file?",
+        confirmarEliminarCapsula: "Delete your capsule completely?",
+        alertaCapsulaEliminada: "Capsule deleted."
+      },
+      fr: {
+        titulo: "Capsule Temporelle",
+        descripcion1: "Une capsule temporelle est un espace personnel et privé où vous pouvez conserver des souvenirs importants comme des photos, des vidéos, des lettres ou des documents, pour les revoir dans le futur.",
+        descripcion2: "Cette application permet à chaque utilisateur de créer sa propre capsule protégée par mot de passe. Vous pourrez télécharger jusqu'à 10 photos, une vidéo et un document PDF, le tout dans un environnement sécurisé et personnalisé.",
+        paraQueSirve: "À quoi ça sert ?🤔",
+        descripcion3: "• Pour conserver des moments uniques.<br>• Pour réfléchir à qui vous êtes aujourd'hui et qui vous serez demain.<br>• Pour créer un témoignage personnel de votre histoire.",
+        descripcion4: "Vous pouvez également inclure une photo de vous au moment de la création. En revenant et en ouvrant votre capsule, vous pourrez voir comment vous pensiez, ressentiez et viviez à ce moment-là.",
+        descripcion5: "C'est comme un message au futur envoyé par votre vous actuel !",
+        crearTitulo: "⏳ Créez votre Capsule Temporelle",
+        nombrePlaceholder: "Votre nom complet",
+        clavePlaceholder: "Créez un mot de passe",
+        fotoSubtitulo: "Téléchargez votre photo de profil",
+        btnCrear: "Créer Capsule",
+        accesoTitle: "Vous avez déjà une capsule ?",
+        accesoPlaceholder: "Entrez votre mot de passe",
+        btnAbrir: "Ouvrir Capsule",
+        bienvenido: "Bienvenue",
+        fechaCreacion: "📅 Date de création :",
+        subirArchivo: "📤 Télécharger un fichier",
+        limiteArchivos: "(Maximum 10 photos, 1 vidéo et 1 PDF)",
+        btnGuardar: "Enregistrer le fichier",
+        archivosTitulo: "📚 Fichiers enregistrés :",
+        btnCerrar: "🔒 Fermer la session",
+        btnEliminar: "🗑️ Supprimer la Capsule",
+        alertaCampos: "Remplissez tous les champs et téléchargez une photo.",
+        alertaCreada: "Capsule créée avec succès !",
+        alertaNoEncontrada: "Mot de passe incorrect ou capsule non trouvée.",
+        alertaSeleccionaArchivo: "Sélectionnez un fichier.",
+        alertaMaxFotos: "Maximum 10 images.",
+        alertaMaxPDF: "Seulement 1 PDF autorisé.",
+        alertaMaxVideo: "Seulement 1 vidéo autorisée.",
+        confirmarEliminarArchivo: "Supprimer ce fichier ?",
+        confirmarEliminarCapsula: "Supprimer complètement votre capsule ?",
+        alertaCapsulaEliminada: "Capsule supprimée."
+      }
+    };
+
+    // Función para cambiar el idioma
+    function cambiarIdioma(idioma) {
+      // Actualizar botones de idioma
+      document.getElementById('btn-es').classList.remove('active');
+      document.getElementById('btn-en').classList.remove('active');
+      document.getElementById('btn-fr').classList.remove('active');
+      document.getElementById('btn-' + idioma).classList.add('active');
+      
+      // Obtener traducciones
+      const t = traducciones[idioma];
+      
+      // Actualizar contenido
+      document.getElementById('titulo-principal').textContent = t.titulo;
+      document.getElementById('descripcion-1').textContent = t.descripcion1;
+      document.getElementById('descripcion-2').textContent = t.descripcion2;
+      document.getElementById('para-que-sirve').textContent = t.paraQueSirve;
+      document.getElementById('descripcion-3').innerHTML = t.descripcion3;
+      document.getElementById('descripcion-4').textContent = t.descripcion4;
+      document.getElementById('descripcion-5').innerHTML = '<strong>' + t.descripcion5 + '</strong>';
+      document.getElementById('titulo-crear').textContent = t.crearTitulo;
+      document.getElementById('nombre').placeholder = t.nombrePlaceholder;
+      document.getElementById('clave').placeholder = t.clavePlaceholder;
+      document.getElementById('subtitulo-foto').textContent = t.fotoSubtitulo;
+      document.getElementById('btn-crear').textContent = t.btnCrear;
+      document.getElementById('titulo-acceso').textContent = t.accesoTitle;
+      document.getElementById('claveAcceso').placeholder = t.accesoPlaceholder;
+      document.getElementById('btn-abrir').textContent = t.btnAbrir;
+      document.getElementById('bienvenido').textContent = t.bienvenido;
+      document.getElementById('fecha-creacion').textContent = t.fechaCreacion;
+      document.getElementById('subir-archivo').textContent = t.subirArchivo;
+      document.getElementById('limite-archivos').textContent = t.limiteArchivos;
+      document.getElementById('btn-guardar').textContent = t.btnGuardar;
+      document.getElementById('archivos-guardados-titulo').textContent = t.archivosTitulo;
+      document.getElementById('btn-cerrar').textContent = t.btnCerrar;
+      document.getElementById('btn-eliminar').textContent = t.btnEliminar;
+      
+      // Guardar preferencia de idioma
+      localStorage.setItem('idiomaPreferido', idioma);
+    }
+
+    // Cargar idioma preferido al inicio
+    document.addEventListener('DOMContentLoaded', function() {
+      const idiomaGuardado = localStorage.getItem('idiomaPreferido') || 'es';
+      cambiarIdioma(idiomaGuardado);
+    });
+
+    // Funciones de la cápsula del tiempo
     function crearCapsula() {
       const nombre = document.getElementById('nombre').value;
       const clave = document.getElementById('clave').value;
       const foto = document.getElementById('fotoPerfilInput').files[0];
       const fecha = new Date().toLocaleString();
+      const idioma = localStorage.getItem('idiomaPreferido') || 'es';
+      const t = traducciones[idioma];
 
       if (!nombre || !clave || !foto) {
-        alert("Completa todos los campos y sube una foto.");
+        alert(t.alertaCampos);
         return;
       }
 
@@ -201,7 +594,7 @@
           archivos: []
         };
         localStorage.setItem('capsula_' + clave, JSON.stringify(usuario));
-        alert('¡Cápsula creada con éxito!');
+        alert(t.alertaCreada);
         document.getElementById('registro').style.display = 'none';
         document.getElementById('acceso').style.display = 'block';
       };
@@ -211,12 +604,15 @@
     function abrirCapsula() {
       const clave = document.getElementById('claveAcceso').value;
       const data = localStorage.getItem('capsula_' + clave);
+      const idioma = localStorage.getItem('idiomaPreferido') || 'es';
+      const t = traducciones[idioma];
+
       if (data) {
         const usuario = JSON.parse(data);
         document.getElementById('descripcion').style.display = 'none';
         mostrarCapsula(usuario, clave);
       } else {
-        alert('Contraseña incorrecta o cápsula no encontrada.');
+        alert(t.alertaNoEncontrada);
       }
     }
 
@@ -239,7 +635,11 @@
         } else if (a.tipo.startsWith("video/")) {
           vista += `<video controls src="${a.data}" height="200px"></video>`;
         }
-        vista += `<br><button class="btn-eliminar" onclick="eliminarArchivo(${i})">Eliminar</button>`;
+        
+        const idioma = localStorage.getItem('idiomaPreferido') || 'es';
+        const t = traducciones[idioma];
+        
+        vista += `<br><button class="btn-eliminar" onclick="eliminarArchivo(${i})">${t.btnEliminar.replace('🗑️ Borrar Cápsula', 'Eliminar')}</button>`;
         contenedor.innerHTML += `<div class="archivo-item">📁 ${vista}</div>`;
       });
 
@@ -253,16 +653,19 @@
 
     function guardarArchivo() {
       const archivo = document.getElementById('archivo').files[0];
-      if (!archivo) return alert("Selecciona un archivo.");
+      const idioma = localStorage.getItem('idiomaPreferido') || 'es';
+      const t = traducciones[idioma];
+
+      if (!archivo) return alert(t.alertaSeleccionaArchivo);
 
       const tipo = archivo.type;
       const imagenes = contarArchivosPorTipo(window.usuarioActual.archivos, "image/");
       const pdfs = contarArchivosPorTipo(window.usuarioActual.archivos, "application/pdf");
       const videos = contarArchivosPorTipo(window.usuarioActual.archivos, "video/");
 
-      if (tipo.startsWith("image/") && imagenes >= 10) return alert("Máximo 10 imágenes.");
-      if (tipo === "application/pdf" && pdfs >= 1) return alert("Solo 1 PDF permitido.");
-      if (tipo.startsWith("video/") && videos >= 1) return alert("Solo 1 video permitido.");
+      if (tipo.startsWith("image/") && imagenes >= 10) return alert(t.alertaMaxFotos);
+      if (tipo === "application/pdf" && pdfs >= 1) return alert(t.alertaMaxPDF);
+      if (tipo.startsWith("video/") && videos >= 1) return alert(t.alertaMaxVideo);
 
       const lector = new FileReader();
       lector.onload = function (e) {
@@ -274,12 +677,16 @@
         window.usuarioActual.archivos.push(nuevoArchivo);
         localStorage.setItem('capsula_' + window.claveActual, JSON.stringify(window.usuarioActual));
         mostrarCapsula(window.usuarioActual, window.claveActual);
+        document.getElementById('archivo').value = ''; // Limpiar el input de archivo
       };
       lector.readAsDataURL(archivo);
     }
 
     function eliminarArchivo(indice) {
-      if (confirm("¿Eliminar este archivo?")) {
+      const idioma = localStorage.getItem('idiomaPreferido') || 'es';
+      const t = traducciones[idioma];
+      
+      if (confirm(t.confirmarEliminarArchivo)) {
         window.usuarioActual.archivos.splice(indice, 1);
         localStorage.setItem('capsula_' + window.claveActual, JSON.stringify(window.usuarioActual));
         mostrarCapsula(window.usuarioActual, window.claveActual);
@@ -295,122 +702,19 @@
       document.getElementById('clave').value = '';
       document.getElementById('fotoPerfilInput').value = '';
       document.getElementById('claveAcceso').value = '';
+      document.getElementById('archivo').value = '';
     }
 
     function eliminarCapsula() {
-      if (confirm("¿Borrar tu cápsula completamente?")) {
+      const idioma = localStorage.getItem('idiomaPreferido') || 'es';
+      const t = traducciones[idioma];
+      
+      if (confirm(t.confirmarEliminarCapsula)) {
         localStorage.removeItem('capsula_' + window.claveActual);
-        alert("Cápsula eliminada.");
+        alert(t.alertaCapsulaEliminada);
         cerrarSesion();
       }
     }
   </script>
-<!-- Asegúrate de incluir esta línea en tu <head> -->
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-
-<style>
-  footer {
-    background-color: #000;
-    color: #ccc;
-    padding: 30px 20px;
-    font-size: 0.8rem;
-    text-align: center;
-    line-height: 1.5;
-    border-top: 2px solid #ff6f00;
-    margin-top: 40px;
-    font-family: 'Playfair Display', serif;
-  }
-
-  footer strong {
-    color: #fff;
-    font-weight: 700;
-  }
-
-  footer em {
-    color: #ffa726;
-    font-style: normal;
-    font-weight: 400;
-  }
-
-  footer a {
-    color: #F6BE00;
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  footer a:hover {
-    text-decoration: underline;
-  }
-
-  .enlaces-footer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
-  }
-
-  .enlaces-footer a {
-    white-space: nowrap;
-  }
-
-  .contador-visitas {
-    margin-top: 25px;
-  }
-
-  .contador-visitas img {
-    max-width: 100px;
-    opacity: 0.9;
-  }
-
-  .doi-badge img,
-  .cc-logo img {
-    vertical-align: middle;
-    height: 20px;
-    margin: 0 5px;
-  }
-</style>
-
-<footer>
-  © 2024 — Herramientas del Proyecto de Investigación: <strong>*Emociones en el Aula*</strong><br>
-  Propuesta educativa y cultural creada por <strong>Yobana Orozco Benavides</strong>, Escritora | Docente | Gestora de proyectos artísticos y pedagógicos<br><br>
-  
-  Licencia: 
-  <em>Creative Commons Atribución-NoComercial 4.0 Internacional (CC BY-NC 4.0)</em>
-  <span class="cc-logo">
-    <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">
-      <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC Logo">
-    </a>
-  </span>
-  <br>
-  Uso libre con fines educativos — <strong>prohibido uso comercial</strong><br><br>
-
-  Más información de la autora: 
-  <a href="https://yobanaorozcoartista.bio.link/" target="_blank" rel="noopener">yobanaorozcoartista.bio.link</a>
-
-  <div class="enlaces-footer">
-    <a href="https://orcid.org/0009-0002-9253-6429" target="_blank">ORCID</a>
-    <a href="https://www.webofscience.com/wos/?mode=Nextgen&path=%2Fwos%2Fauthor%2Frecord%2FLLM-9647-2024&IsProductCode=Yes&Init=Yes&DestApp=UA&Func=Frame&action=transfer&SrcApp=CR&SID=USW2EC0AFFb0eJYIUmqxKCgZWIVbn" target="_blank">Web of Science</a>
-    <a href="https://account.ncbi.nlm.nih.gov/?back_url=https%3A%2F%2Fwww.ncbi.nlm.nih.gov%2Fmyncbi%2F" target="_blank">NCBI</a>
-    <a href="https://es.slideshare.net/YOBANAOROZCO" target="_blank">SlideShare</a>
-    <a href="https://hq.ssrn.com/login/authentication.cfm?rectype=edit&perinf=y&partid=7786766" target="_blank">SSRN</a>
-    <a href="https://www.researchgate.net/" target="_blank">ResearchGate</a>
-    <a href="https://siise.bibliotecanacional.gov.co/siise/Login?ReturnUrl=%2fsiise%2fSeleccionAdquisiciones%2fSolicitudISSN%2fIndex" target="_blank">SIISE</a>
-    <a href="https://scientificrc.org/index.php/src/login?source=%2Findex.php%2Fsrc%2Fsubmission%2Fwizard" target="_blank">Scientific RC</a>
-    <a href="https://www.openaire.eu/annual-reports" target="_blank">OpenAIRE</a>
-    <a href="https://zenodo.org/" target="_blank">Zenodo</a>
-    <a href="https://sso.anii.org.uy/oxauth/login.htm" target="_blank">ANII</a>
-    <a href="https://rizoma.conahcyt.mx/acerca-de-mi/mi-perfil" target="_blank">Rizoma CONAHCYT</a>
-    <a href="https://papersubmission.scirp.org/paper/showAddPaper" target="_blank">SCIRP Submission</a>
-    <a href="https://utolima.academia.edu/YOBANAOROZCOBENAVIDES" target="_blank">Academia.edu</a>
-    <a href="https://www.studocu.com/co/user/yobana-orozco-benavides/15382735?origin=user-menu" target="_blank">Studocu</a>
-    <a href="https://www.calameo.com/accounts/7997056" target="_blank">Calameo</a>
-    <a href="https://www.amazon.com.mx/stores/YOBANA-OROZCO-BENAVIDES/author/B0CZG5RS1T?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true" target="_blank">Amazon</a>
-  </div>
- 
-  </div>
-</footer>
-
 </body>
 </html>
-
